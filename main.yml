@@ -1,10 +1,17 @@
 ---
 - "hosts": "all"
   "name": "server base"
-  "remote_user": "alex"
   "tasks":
   - "become": true
     "name": "install neofetch"
     "package": "name=\"neofetch\" state=\"present\""
+  - "become": true
+    "copy":
+      "dest": "/etc/profile.d/motd.sh"
+      "group": "root"
+      "mode": "0755"
+      "owner": "root"
+      "src": "scripts/motd.sh"
+    "name": "copy script motd.sh"
 ...
 

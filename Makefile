@@ -11,4 +11,4 @@ lint:
 
 .PHONY: apply
 apply: build
-	ansible-playbook -i hosts.yml -Kk main.yml
+	ansible-playbook -i hosts.yml -K main.yml

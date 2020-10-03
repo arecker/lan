@@ -1,6 +1,6 @@
 local Roles = {
   all: 'all',
-  kubeNodes: 'kube-nodes',
+  kubeNodes: 'kubenodes',
   list():: (
     [
       self[k]
@@ -32,11 +32,24 @@ local Package(name='') = (
   }
 );
 
+local Script(name='', path='') = (
+  {
+    name: 'copy script ' + name,
+    become: true,
+    copy: {
+      src: "scripts/" + name,
+      dest: path,
+      owner: 'root',
+      group: 'root',
+      mode: '0755'
+    }
+  }
+);
+
 local Playbook(name='', hosts='', tasks=[]) = {
   name: name,
   hosts: hosts,
   tasks: tasks,
-  remote_user: 'alex',
 };
 
 local main = [
@@ -45,6 +58,7 @@ local main = [
     hosts=Roles.all,
     tasks=[
       Package(name='neofetch'),
+      Script(name='motd.sh', path='/etc/profile.d/motd.sh'),
     ],
   ),
 ];
