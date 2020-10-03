@@ -1,0 +1,10 @@
+---
+- "hosts": "all"
+  "name": "server base"
+  "remote_user": "alex"
+  "tasks":
+  - "become": true
+    "name": "install neofetch"
+    "package": "name=\"neofetch\" state=\"present\""
+...
+
