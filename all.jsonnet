@@ -16,28 +16,12 @@ local KubeNode(i='') = {
   name: 'farm-' + std.toString(i) + '.local',
 };
 
-local HostList(hosts) = {
-  hosts: hosts,
-  export():: (
-    local this = self;
-    {
-      all: {
-        children: {
-          [role]: {
-            hosts: {
-              [host.name]: {}
-              for host
-              in this.hosts
-              if host.role == role
-            },
-          }
-          for role in Roles.list()
-        },
-      },
-    }
-  ),
-};
-
+local hosts = [
+  KubeNode(0),
+  KubeNode(1),
+  KubeNode(2),
+  KubeNode(3),
+];
 
 local Package(name='') = (
   local args = std.format('name="%s" state="present"', name);
@@ -65,14 +49,25 @@ local main = [
   ),
 ];
 
-local hosts = HostList([
-  KubeNode(0),
-  KubeNode(1),
-  KubeNode(2),
-  KubeNode(3),
-]);
-
 {
   'main.yml': std.manifestYamlStream([main]),
-  'hosts.yml': std.manifestYamlDoc(hosts.export()),
+  'hosts.yml': std.manifestYamlDoc(
+    (
+      {
+        all: {
+          children: {
+            [role]: {
+              hosts: {
+                [host.name]: {}
+                for host
+                in hosts
+                if host.role == role
+              },
+            }
+            for role in Roles.list()
+          },
+        },
+      }
+    ),
+  ),
 }
