@@ -1,0 +1,10 @@
+FROM ubuntu:latest
+MAINTAINER Alex Recker <alex@reckerfamily.com>
+
+# docker run --privileged=true --restart=always --net=host --name=nfs-client -v /data:/data arecker/nfs-client:latest
+
+ENV NFS_SERVER="nas.local"
+ENV NFS_PATH="/volume1/farm"
+
+RUN apt-get update && apt-get install -y nfs-common
+CMD mount -o nolock "$SERVER:$SHARE" /data
