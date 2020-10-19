@@ -1,0 +1,6 @@
+---
+- "hosts": "seedbox"
+  "name": "seedbox"
+  "tasks": []
+...
+

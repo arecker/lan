@@ -1,5 +1,6 @@
 local ansible = import './jsonnet/ansible.jsonnet';
 local console = import './console.jsonnet';
+local seedbox = import './seedbox.jsonnet';
 
 local Host = {
   remoteUser: 'alex',
@@ -36,13 +37,28 @@ local Console() = Host {
   name: 'console'
 };
 
+local seedboxPlaybook = [
+  ansible.Playbook(
+    name='seedbox',
+    hosts='seedbox',
+    tasks=seedbox.tasks,
+  ),
+];
+
+local Seedbox() = Host {
+  role: 'seedbox',
+  name: 'seedbox'
+};
+
 {
   'main.yml': std.manifestYamlStream([main]),
   'console.yml': std.manifestYamlStream([consolePlaybook]),
+  'seedbox.yml': std.manifestYamlStream([seedboxPlaybook]),
   'hosts.yml': std.manifestYamlDoc(ansible.HostFile([
     KubeNode(0),
     KubeNode(1),
     KubeNode(2),
+    Seedbox(),
     Console(),
   ])),
 }

@@ -7,7 +7,7 @@ build:
 
 .PHONY: lint
 lint:
-	ansible-lint main.yml
+	ansible-lint *.yml
 
 .PHONY: apply
 apply: build
@@ -16,3 +16,7 @@ apply: build
 .PHONY: console
 console: build
 	ansible-playbook -i hosts.yml -K console.yml
+
+.PHONY: seedbox
+seedbox: build
+	ansible-playbook -i hosts.yml -K seedbox.yml
