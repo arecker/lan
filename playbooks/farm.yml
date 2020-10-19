@@ -1,5 +1,5 @@
 ---
-- "hosts": "all"
+- "hosts": "farm-[0:2:1].local"
   "name": "server base"
   "tasks":
   - "become": true
@@ -17,7 +17,7 @@
       "group": "root"
       "mode": "0755"
       "owner": "root"
-      "src": "scripts/motd.sh"
+      "src": "../scripts/motd.sh"
     "name": "copy script motd.sh"
 ...
 

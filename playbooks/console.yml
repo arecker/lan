@@ -1,7 +1,24 @@
 ---
-- "hosts": "console"
+- "hosts": "console.local"
   "name": "console workstation"
   "tasks":
+  - "become": true
+    "name": "install cowsay"
+    "package": "name=\"cowsay\" state=\"present\""
+  - "become": true
+    "name": "install fortune"
+    "package": "name=\"fortune\" state=\"present\""
+  - "become": true
+    "name": "install neofetch"
+    "package": "name=\"neofetch\" state=\"present\""
+  - "become": true
+    "copy":
+      "dest": "/etc/profile.d/motd.sh"
+      "group": "root"
+      "mode": "0755"
+      "owner": "root"
+      "src": "../scripts/motd.sh"
+    "name": "copy script motd.sh"
   - "become": true
     "name": "install pass"
     "package": "name=\"pass\" state=\"present\""

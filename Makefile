@@ -1,22 +1,25 @@
+ANSIBLE=ansible-playbook -K -i hosts.yml --vault-id lan@scripts/pass-vault-client.py
+JSONNET=jsonnet -S -m .
+
 .PHONY: all
 all: build lint
 
 .PHONY: build
 build:
-	jsonnet -S -m . all.jsonnet
+	$(JSONNET) jsonnet/all.jsonnet
 
 .PHONY: lint
 lint:
-	ansible-lint *.yml
+	ansible-lint playbooks/*.yml
 
-.PHONY: apply
-apply: build
-	ansible-playbook -i hosts.yml -K main.yml
+.PHONY: farm
+farm: build
+	$(ANSIBLE) playbooks/farm.yml
 
 .PHONY: console
 console: build
-	ansible-playbook -i hosts.yml -K console.yml
+	$(ANSIBLE) playbooks/console.yml
 
 .PHONY: seedbox
 seedbox: build
-	ansible-playbook -i hosts.yml -K seedbox.yml
+	$(ANSIBLE) playbooks/seedbox.yml

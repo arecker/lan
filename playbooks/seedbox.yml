@@ -1,0 +1,50 @@
+---
+- "hosts": "seedbox.local"
+  "name": "seedbox"
+  "tasks":
+  - "become": true
+    "name": "install bash"
+    "package": "name=\"bash\" state=\"present\""
+  - "become": true
+    "name": "install openvpn"
+    "package": "name=\"openvpn\" state=\"present\""
+  - "become": true
+    "copy":
+      "dest": "/usr/local/etc/openvpn/openvpn.conf"
+      "group": "wheel"
+      "mode": "0644"
+      "owner": "root"
+      "src": "../configs/openvpn/openvpn.conf"
+    "name": "copy config openvpn/openvpn.conf"
+  - "become": true
+    "copy":
+      "dest": "/usr/local/etc/openvpn/ca.rsa.2048.crt"
+      "group": "wheel"
+      "mode": "0644"
+      "owner": "root"
+      "src": "../configs/openvpn/ca.rsa.2048.crt"
+    "name": "copy config openvpn/ca.rsa.2048.crt"
+  - "become": true
+    "copy":
+      "dest": "/usr/local/etc/openvpn/crl.rsa.2048.pem"
+      "group": "wheel"
+      "mode": "0644"
+      "owner": "root"
+      "src": "../configs/openvpn/crl.rsa.2048.pem"
+    "name": "copy config openvpn/crl.rsa.2048.pem"
+  - "become": true
+    "copy":
+      "dest": "/usr/local/etc/openvpn/pass.txt"
+      "group": "wheel"
+      "mode": "0644"
+      "owner": "root"
+      "src": "../configs/openvpn/pass.txt"
+    "name": "copy config openvpn/pass.txt"
+  - "become": true
+    "name": "start service openvpn"
+    "service":
+      "enabled": true
+      "name": "openvpn"
+      "state": "started"
+...
+

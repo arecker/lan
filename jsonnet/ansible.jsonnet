@@ -12,11 +12,25 @@ local Script(name='', path='') = (
     name: 'copy script ' + name,
     become: true,
     copy: {
-      src: 'scripts/' + name,
+      src: '../scripts/' + name,
       dest: path,
       owner: 'root',
       group: 'root',
       mode: '0755',
+    },
+  }
+);
+
+local Config(name='', path='', user='', group='', mode='') = (
+  {
+    name: 'copy config ' + name,
+    become: true,
+    copy: {
+      src: '../configs/' + name,
+      dest: path,
+      owner: user,
+      group: group,
+      mode: mode,
     },
   }
 );
@@ -39,38 +53,28 @@ local GitRepo(url='', destination='', version='master') = {
   },
 };
 
+local Service(name='') = {
+  name: 'start service ' + name,
+  become: true,
+  service: {
+    name: name,
+    state: 'started',
+    enabled: true
+  }
+};
+
 local Playbook(name='', hosts='', tasks=[]) = {
   name: name,
   hosts: hosts,
   tasks: tasks,
 };
 
-local HostFile(hosts) = (
-  local roles = std.uniq([host.role for host in hosts]);
-  {
-    all: {
-      children: {
-        [role]: {
-          hosts: {
-            [host.name]: {
-              ansible_user: host.remoteUser,
-            }
-            for host
-            in hosts
-            if host.role == role
-          },
-        }
-        for role in roles
-      },
-    },
-  }
-);
-
 {
   Directory:: Directory,
   GitRepo:: GitRepo,
-  HostFile:: HostFile,
   Package:: Package,
   Playbook:: Playbook,
   Script:: Script,
+  Service:: Service,
+  Config:: Config,
 }

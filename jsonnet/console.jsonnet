@@ -1,10 +1,15 @@
-local a = import './jsonnet/ansible.jsonnet';
+local a = import './ansible.jsonnet';
+local hosts = import './hosts.jsonnet';
 
 local params = {
   emacsVersion: 'emacs-27.1'
 };
 
 local tasks = [
+  a.Package(name='cowsay'),
+  a.Package(name='fortune'),
+  a.Package(name='neofetch'),
+  a.Script(name='motd.sh', path='/etc/profile.d/motd.sh'),
   a.Package(name='pass'),
   a.Directory(path='~/downloads/'),
   a.Directory(path='~/src/'),
@@ -19,6 +24,14 @@ local tasks = [
   )
 ];
 
+local playbook = [
+  a.Playbook(
+    name='console workstation',
+    hosts=hosts.console,
+    tasks=tasks,
+  )
+];
+
 {
-  tasks: tasks,
+  playbook:: playbook
 }
