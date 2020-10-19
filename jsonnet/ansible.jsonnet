@@ -21,6 +21,15 @@ local Script(name='', path='') = (
   }
 );
 
+local GitRepo(url='', destination='', version='') = {
+  name: 'clone repo to ' + destination,
+  git: {
+    repo: url,
+    dest: destination,
+    version: version,
+  },
+};
+
 local Playbook(name='', hosts='', tasks=[]) = {
   name: name,
   hosts: hosts,
@@ -34,12 +43,15 @@ local HostFile(hosts) = (
       children: {
         [role]: {
           hosts: {
-            [host.name]: {}
+            [host.name]: {
+              ansible_user: host.remoteUser,
+            }
             for host
             in hosts
             if host.role == role
           },
-        } for role in roles
+        }
+        for role in roles
       },
     },
   }
@@ -47,6 +59,7 @@ local HostFile(hosts) = (
 
 {
   Package:: Package,
+  GitRepo:: GitRepo,
   Script:: Script,
   Playbook:: Playbook,
   HostFile:: HostFile,

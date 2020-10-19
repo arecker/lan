@@ -12,3 +12,7 @@ lint:
 .PHONY: apply
 apply: build
 	ansible-playbook -i hosts.yml -K main.yml
+
+.PHONY: console
+console: build
+	ansible-playbook -i hosts.yml -K console.yml

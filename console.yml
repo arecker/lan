@@ -1,0 +1,14 @@
+---
+- "hosts": "console"
+  "name": "console workstation"
+  "tasks":
+  - "become": true
+    "name": "install pass"
+    "package": "name=\"pass\" state=\"present\""
+  - "git":
+      "dest": "~/src/emacs"
+      "repo": "https://git.savannah.gnu.org/git/emacs.git"
+      "version": "emacs-27.1"
+    "name": "clone repo to ~/src/emacs"
+...
+
