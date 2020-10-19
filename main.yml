@@ -3,6 +3,12 @@
   "name": "server base"
   "tasks":
   - "become": true
+    "name": "install cowsay"
+    "package": "name=\"cowsay\" state=\"present\""
+  - "become": true
+    "name": "install fortune"
+    "package": "name=\"fortune\" state=\"present\""
+  - "become": true
     "name": "install neofetch"
     "package": "name=\"neofetch\" state=\"present\""
   - "become": true

@@ -1,2 +1,3 @@
-neofetch --stdout --color_blocks off
+# neofetch --stdout --color_blocks off
+cowsay "$(fortune)"
 

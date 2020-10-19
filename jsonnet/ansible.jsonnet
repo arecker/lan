@@ -21,7 +21,16 @@ local Script(name='', path='') = (
   }
 );
 
-local GitRepo(url='', destination='', version='') = {
+local Directory(path='', mode='0754') = {
+  name: 'create directory ' + path,
+  file: {
+    path: path,
+    state: 'directory',
+    mode: mode,
+  },
+};
+
+local GitRepo(url='', destination='', version='master') = {
   name: 'clone repo to ' + destination,
   git: {
     repo: url,
@@ -58,9 +67,10 @@ local HostFile(hosts) = (
 );
 
 {
-  Package:: Package,
+  Directory:: Directory,
   GitRepo:: GitRepo,
-  Script:: Script,
-  Playbook:: Playbook,
   HostFile:: HostFile,
+  Package:: Package,
+  Playbook:: Playbook,
+  Script:: Script,
 }

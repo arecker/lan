@@ -5,10 +5,25 @@
   - "become": true
     "name": "install pass"
     "package": "name=\"pass\" state=\"present\""
+  - "file":
+      "mode": "0754"
+      "path": "~/downloads/"
+      "state": "directory"
+    "name": "create directory ~/downloads/"
+  - "file":
+      "mode": "0754"
+      "path": "~/src/"
+      "state": "directory"
+    "name": "create directory ~/src/"
   - "git":
       "dest": "~/src/emacs"
       "repo": "https://git.savannah.gnu.org/git/emacs.git"
       "version": "emacs-27.1"
     "name": "clone repo to ~/src/emacs"
+  - "git":
+      "dest": "~/src/dotfiles"
+      "repo": "git@github.com:arecker/dotfiles.git"
+      "version": "master"
+    "name": "clone repo to ~/src/dotfiles"
 ...
 

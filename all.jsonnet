@@ -15,6 +15,8 @@ local main = [
     name='server base',
     hosts='all',
     tasks=[
+      ansible.Package(name='cowsay'),
+      ansible.Package(name='fortune'),
       ansible.Package(name='neofetch'),
       ansible.Script(name='motd.sh', path='/etc/profile.d/motd.sh'),
     ],
