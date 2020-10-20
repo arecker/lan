@@ -6,6 +6,9 @@
     "name": "install bash"
     "package": "name=\"bash\" state=\"present\""
   - "become": true
+    "name": "install nano"
+    "package": "name=\"nano\" state=\"present\""
+  - "become": true
     "name": "install openvpn"
     "package": "name=\"openvpn\" state=\"present\""
   - "become": true
@@ -46,5 +49,22 @@
       "enabled": true
       "name": "openvpn"
       "state": "started"
+  - "become": true
+    "name": "install transmission-cli"
+    "package": "name=\"transmission-cli\" state=\"present\""
+  - "become": true
+    "name": "install transmission-daemon"
+    "package": "name=\"transmission-daemon\" state=\"present\""
+  - "become": true
+    "name": "install transmission-web"
+    "package": "name=\"transmission-web\" state=\"present\""
+  - "become": true
+    "copy":
+      "dest": "/usr/local/etc/transmission/home/settings.json"
+      "group": "transmission"
+      "mode": "0600"
+      "owner": "transmission"
+      "src": "../configs/transmission.json"
+    "name": "copy config transmission.json"
 ...
 
