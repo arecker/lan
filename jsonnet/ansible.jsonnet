@@ -7,21 +7,21 @@ local Package(name='') = (
   }
 );
 
-local Script(name='', path='') = (
+local Script(name='', path='', user='root', group='root', mode='0755') = (
   {
     name: 'copy script ' + name,
     become: true,
     copy: {
       src: '../scripts/' + name,
       dest: path,
-      owner: 'root',
-      group: 'root',
-      mode: '0755',
+      owner: user,
+      group: group,
+      mode: mode,
     },
   }
 );
 
-local Config(name='', path='', user='', group='', mode='') = (
+local Config(name='', path='', user='', group='', mode='', notify=[]) = (
   {
     name: 'copy config ' + name,
     become: true,
@@ -32,6 +32,7 @@ local Config(name='', path='', user='', group='', mode='') = (
       group: group,
       mode: mode,
     },
+    notify: notify,
   }
 );
 
@@ -59,14 +60,15 @@ local Service(name='') = {
   service: {
     name: name,
     state: 'started',
-    enabled: true
-  }
+    enabled: true,
+  },
 };
 
-local Playbook(name='', hosts='', tasks=[]) = {
+local Playbook(name='', hosts='', tasks=[], handlers=[]) = {
   name: name,
   hosts: hosts,
   tasks: tasks,
+  handlers: handlers,
 };
 
 {

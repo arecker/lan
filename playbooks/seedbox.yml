@@ -1,5 +1,19 @@
 ---
-- "hosts": "seedbox.local"
+- "handlers":
+  - "become": true
+    "name": "reload firewall"
+    "service":
+      "name": "ipfw"
+      "state": "restarted"
+  - "become": true
+    "name": "update openvpn service"
+    "service":
+      "name": "openvpn"
+      "state": "restarted"
+  - "become": true
+    "name": "update transmission service"
+    "script": "../scripts/update-transmission.sh"
+  "hosts": "seedbox.local"
   "name": "seedbox"
   "tasks":
   - "become": true
@@ -8,6 +22,14 @@
   - "become": true
     "name": "install nano"
     "package": "name=\"nano\" state=\"present\""
+  - "become": true
+    "copy":
+      "dest": "/etc/rc.conf"
+      "group": "wheel"
+      "mode": "0644"
+      "owner": "root"
+      "src": "../configs/rc.conf"
+    "name": "copy rc.conf"
   - "become": true
     "name": "install openvpn"
     "package": "name=\"openvpn\" state=\"present\""
@@ -19,6 +41,8 @@
       "owner": "root"
       "src": "../configs/openvpn/openvpn.conf"
     "name": "copy config openvpn/openvpn.conf"
+    "notify":
+    - "update openvpn service"
   - "become": true
     "copy":
       "dest": "/usr/local/etc/openvpn/ca.rsa.2048.crt"
@@ -27,6 +51,8 @@
       "owner": "root"
       "src": "../configs/openvpn/ca.rsa.2048.crt"
     "name": "copy config openvpn/ca.rsa.2048.crt"
+    "notify":
+    - "update openvpn service"
   - "become": true
     "copy":
       "dest": "/usr/local/etc/openvpn/crl.rsa.2048.pem"
@@ -35,6 +61,8 @@
       "owner": "root"
       "src": "../configs/openvpn/crl.rsa.2048.pem"
     "name": "copy config openvpn/crl.rsa.2048.pem"
+    "notify":
+    - "update openvpn service"
   - "become": true
     "copy":
       "dest": "/usr/local/etc/openvpn/pass.txt"
@@ -43,6 +71,8 @@
       "owner": "root"
       "src": "../configs/openvpn/pass.txt"
     "name": "copy config openvpn/pass.txt"
+    "notify":
+    - "update openvpn service"
   - "become": true
     "name": "start service openvpn"
     "service":
@@ -60,11 +90,34 @@
     "package": "name=\"transmission-web\" state=\"present\""
   - "become": true
     "copy":
-      "dest": "/usr/local/etc/transmission/home/settings.json"
+      "dest": "/usr/local/etc/transmission/home/settings.latest.json"
       "group": "transmission"
       "mode": "0600"
       "owner": "transmission"
       "src": "../configs/transmission.json"
     "name": "copy config transmission.json"
+    "notify":
+    - "update transmission service"
+  - "become": true
+    "name": "start service transmission"
+    "service":
+      "enabled": true
+      "name": "transmission"
+      "state": "started"
+  - "become": true
+    "copy":
+      "dest": "/etc/ipfw.rules"
+      "group": "wheel"
+      "mode": "0770"
+      "owner": "root"
+      "src": "../scripts/ipfw.rules"
+    "name": "copy ipfw.rules"
+    "notify":
+    - "reload firewall"
+  - "become": true
+    "name": "start ipfw service"
+    "service":
+      "name": "ipfw"
+      "state": "started"
 ...
 

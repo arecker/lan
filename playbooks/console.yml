@@ -1,5 +1,6 @@
 ---
-- "hosts": "console.local"
+- "handlers": []
+  "hosts": "console.local"
   "name": "console workstation"
   "tasks":
   - "become": true
