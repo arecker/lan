@@ -1,11 +1,13 @@
 #!/bin/bash
-# Flush out the list before we begin
+
 ipfw -q -f flush
 
 cmd="ipfw -q add"
 vpn="tun0"
+lan="10.0.0.0/24"
 
-$cmd 00001 allow all from any to any via lo0
-$cmd 00010 allow all from any to any via $vpn
-$cmd 00103 deny all from any to any uid transmission
-$cmd 10000 allow all from any to any
+$cmd 00001 allow all from any to any via $vpn
+$cmd 00002 allow all from me to $lan uid transmission
+$cmd 00003 allow all from $lan to me uid transmission
+$cmd 00004 deny all from any to any uid transmission
+$cmd 00005 allow all from any to any
