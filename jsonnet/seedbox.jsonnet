@@ -23,8 +23,8 @@ local ReloadFirewallHandler = {
   become: true,
   service: {
     name: 'ipfw',
-    state: 'restarted'
-  }
+    state: 'restarted',
+  },
 };
 
 local openVPNTasks = [
@@ -55,7 +55,16 @@ local transmissionTasks = [
     mode='0600',
     notify=[UpdateTransmissionHandler.name]
   ),
-  a.Service(name='transmission'),
+  {
+    name: 'start transmission service',
+    become: true,
+    service: {
+      name: 'transmission',
+      state: 'started',
+      enabled: false,
+    },
+  },
+
 ];
 
 local firewallTasks = [
@@ -76,9 +85,33 @@ local firewallTasks = [
     become: true,
     service: {
       name: 'ipfw',
-      state: 'started'
-    }
-  }
+      state: 'started',
+      enabled: true,
+    },
+  },
+];
+
+local mountTasks = [
+  {
+    name: 'start nfsclient service',
+    become: true,
+    service: {
+      name: 'nfsclient',
+      state: 'started',
+      enabled: true,
+    },
+  },
+  {
+    name: 'mount downloads directory on boot',
+    become: true,
+    mount: {
+      path: '/usr/local/etc/transmission/home/Downloads',
+      src: 'nas.local:/volume1/downloads',
+      fstype: 'nfs',
+      opts: 'rw,nfsv4',
+      state: 'mounted',
+    },
+  },
 ];
 
 local playbook = [
@@ -99,7 +132,7 @@ local playbook = [
           mode: '0644',
         },
       },
-    ] + openVPNTasks + transmissionTasks + firewallTasks,
+    ] + mountTasks + openVPNTasks + transmissionTasks + firewallTasks,
     handlers=[
       ReloadFirewallHandler,
       UpdateOpenVPNHandler,

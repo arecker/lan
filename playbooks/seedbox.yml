@@ -31,6 +31,20 @@
       "src": "../configs/rc.conf"
     "name": "copy rc.conf"
   - "become": true
+    "name": "start nfsclient service"
+    "service":
+      "enabled": true
+      "name": "nfsclient"
+      "state": "started"
+  - "become": true
+    "mount":
+      "fstype": "nfs"
+      "opts": "rw,nfsv4"
+      "path": "/usr/local/etc/transmission/home/Downloads"
+      "src": "nas.local:/volume1/downloads"
+      "state": "mounted"
+    "name": "mount downloads directory on boot"
+  - "become": true
     "name": "install openvpn"
     "package": "name=\"openvpn\" state=\"present\""
   - "become": true
@@ -99,9 +113,9 @@
     "notify":
     - "update transmission service"
   - "become": true
-    "name": "start service transmission"
+    "name": "start transmission service"
     "service":
-      "enabled": true
+      "enabled": false
       "name": "transmission"
       "state": "started"
   - "become": true
@@ -117,6 +131,7 @@
   - "become": true
     "name": "start ipfw service"
     "service":
+      "enabled": true
       "name": "ipfw"
       "state": "started"
 ...
