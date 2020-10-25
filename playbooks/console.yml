@@ -12,6 +12,7 @@
     - "cowsay"
     - "fortune"
     - "neofetch"
+    - "pandoc"
     - "pass"
   - "file":
       "mode": "0754"

@@ -17,6 +17,7 @@ local tasks = [
       'cowsay',
       'fortune',
       'neofetch',
+      'pandoc',
       'pass',
     ],
   },
