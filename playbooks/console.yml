@@ -4,14 +4,23 @@
   "name": "console workstation"
   "tasks":
   - "become": true
-    "name": "install cowsay"
-    "package": "name=\"cowsay\" state=\"present\""
-  - "become": true
-    "name": "install fortune"
-    "package": "name=\"fortune\" state=\"present\""
-  - "become": true
-    "name": "install neofetch"
-    "package": "name=\"neofetch\" state=\"present\""
+    "name": "install packages"
+    "package":
+      "name": "{{ item }}"
+      "state": "present"
+    "with_items":
+    - "cowsay"
+    - "fortune"
+    - "neofetch"
+    - "pass"
+  - "file":
+      "mode": "0754"
+      "path": "{{ item }}"
+      "state": "directory"
+    "name": "make directories"
+    "with_items":
+    - "~/downloads"
+    - "~/src"
   - "become": true
     "copy":
       "dest": "/etc/profile.d/motd.sh"
@@ -20,19 +29,6 @@
       "owner": "root"
       "src": "../scripts/motd.sh"
     "name": "copy script motd.sh"
-  - "become": true
-    "name": "install pass"
-    "package": "name=\"pass\" state=\"present\""
-  - "file":
-      "mode": "0754"
-      "path": "~/downloads/"
-      "state": "directory"
-    "name": "create directory ~/downloads/"
-  - "file":
-      "mode": "0754"
-      "path": "~/src/"
-      "state": "directory"
-    "name": "create directory ~/src/"
   - "git":
       "dest": "~/src/emacs"
       "repo": "https://git.savannah.gnu.org/git/emacs.git"
