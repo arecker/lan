@@ -1,5 +1,4 @@
 {
-  console: 'console.local',
   seedbox: 'seedbox.local',
   farm: 'farm-[0:2:1].local',
   inventory():: (
